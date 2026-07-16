@@ -54,6 +54,12 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
         <section className="contact-card">
           <h2>{label.profiles}</h2>
           <div className="contact-detail">
+            <span>Google Scholar</span>
+            <a href={profile.googleScholar} target="_blank" rel="noreferrer">
+              Yuning Gu ↗
+            </a>
+          </div>
+          <div className="contact-detail">
             <span>ORCID</span>
             <a href={profile.orcid} target="_blank" rel="noreferrer">
               0009-0003-2561-8122 ↗

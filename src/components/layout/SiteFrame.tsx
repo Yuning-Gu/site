@@ -22,8 +22,21 @@ export default function SiteFrame({
               : 'Pharmaceutical sciences · Drug delivery · Clinical research'}
           </span>
         </div>
-        <a href={`mailto:${profile.email}`}>{profile.email}</a>
-        <small>© {new Date().getFullYear()} Yuning Gu</small>
+        <nav
+          className="footer-profiles"
+          aria-label={lang === 'zh' ? '学术主页' : 'Academic profiles'}
+        >
+          <a href={profile.googleScholar} target="_blank" rel="noreferrer">
+            Google Scholar ↗
+          </a>
+          <a href={profile.orcid} target="_blank" rel="noreferrer">
+            ORCID ↗
+          </a>
+        </nav>
+        <div className="footer-meta">
+          <a href={`mailto:${profile.email}`}>{profile.email}</a>
+          <small>© {new Date().getFullYear()} Yuning Gu</small>
+        </div>
       </footer>
     </div>
   );
