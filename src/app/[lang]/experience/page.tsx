@@ -1,112 +1,56 @@
-import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { isValidLocale, Locale } from '@/lib/i18n/config';
+import { isValidLocale, type Locale } from '@/lib/i18n/config';
+import { createPageMetadata } from '@/lib/metadata';
+import { experiences, pageLabels } from '@/lib/site-content';
 
-export const metadata: Metadata = {
-  title: 'Experience | Yuning Gu',
-  description: 'Professional experience and research work of Yuning Gu.',
-};
-
-const content = {
-  en: {
-    title: 'Experience',
-    experiences: [
-      {
-        title: 'Undergraduate Research Participant',
-        organization: 'Heilongjiang University of Chinese Medicine',
-        period: '2023 – 2024',
-        description: [
-          'Participated in a multidisciplinary research project focused on the application of traditional Chinese medicine (TCM) in managing type 2 diabetes',
-          'Conducted preliminary literature reviews and pathway analyses to support the identification of active herbal compounds',
-          'Assisted with the preparation and extraction of herbal samples using optimized protocols for compound isolation',
-          'Performed chromatographic and spectrometric analysis (HPLC and MS) to identify and quantify major constituents',
-          'Contributed to experimental data recording, statistical analysis, and visualization using tools such as Excel and GraphPad Prism',
-          'Collaborated closely with graduate students and faculty mentors, developing a foundational understanding of experimental pharmacology and evidence-based herbal medicine research'
-        ]
-      },
-      {
-        title: 'QC Intern',
-        organization: 'Bayer (China) Limited – Dihon Pharmaceutical Group Co., Ltd., Yunnan',
-        period: 'Nov 2024 – Present',
-        description: [
-          'Engaged in hands-on quality control testing of pharmaceutical raw materials and finished dosage forms within a GMP-compliant laboratory environment',
-          'Operated and maintained analytical instruments including HPLC (Agilent series) and NIR spectrometers to ensure product compliance with pharmacopeial standards',
-          'Conducted microbial limit tests and participated in environmental monitoring procedures to ensure aseptic manufacturing standards',
-          'Compiled, reviewed, and verified batch testing records and SOP documentation, contributing to internal audit readiness and regulatory reporting',
-          'Completed tasks under the supervision of senior analysts and gained exposure to pharmaceutical quality systems, deviation reporting, and CAPA processes',
-          'Achieved 0 CAPA records during the Dec–Jan evaluation period, demonstrating attention to detail and adherence to regulatory protocols'
-        ]
-      }
-    ]
-  },
-  zh: {
-    title: '实习与科研经历',
-    experiences: [
-      {
-        title: '本科科研参与者',
-        organization: '黑龙江中医药大学',
-        period: '2023 – 2024',
-        description: [
-          '参与多学科交叉课题，研究中药在2型糖尿病治疗中的应用潜力',
-          '协助完成文献综述及信号通路分析，支持活性成分的筛选与机制探索',
-          '负责中药样品的前处理与提取工艺优化，提升有效成分提取率',
-          '使用高效液相色谱（HPLC）和质谱（MS）技术进行成分鉴定与含量测定',
-          '运用Excel和GraphPad Prism等工具完成实验数据的整理、统计与可视化',
-          '在课题过程中与研究生和指导教师密切协作，深入理解实验药理学与中药现代化研究的核心方法与流程'
-        ]
-      },
-      {
-        title: '质量控制实习生',
-        organization: '拜耳中国有限公司 – 滇虹药业集团股份有限公司（云南）',
-        period: '2024年11月 – 至今',
-        description: [
-          '在符合GMP标准的实验室中参与药品原辅料及成品的质量控制检测',
-          '熟练操作Agilent系列HPLC仪器及近红外光谱仪（NIR），确保产品符合《中国药典》标准',
-          '协助完成药品微生物限度检查和洁净区环境监测，保障生产环境符合无菌要求',
-          '编写和核查批检记录与标准操作规程（SOP）文档，协助准备内部审计资料',
-          '在资深分析师指导下，系统学习质量管理体系、偏差报告与CAPA流程',
-          '在2024年12月至2025年1月期间，所在QC小组实现"零偏差记录"，体现了良好的操作规范与质量意识'
-        ]
-      }
-    ]
-  }
-};
+export function generateMetadata({ params }: { params: { lang: string } }) {
+  return createPageMetadata(params.lang, 'experience', {
+    en: {
+      title: 'Experience',
+      description:
+        'Research and pharmaceutical experience across formulation science, quality control, and natural products.',
+    },
+    zh: {
+      title: '学习与研究经历',
+      description: '谷昱宁在药物制剂、质量控制与天然产物研究方面的科研和实践经历。',
+    },
+  });
+}
 
 export default function ExperiencePage({ params }: { params: { lang: Locale } }) {
-  if (!isValidLocale(params.lang)) {
-    notFound();
-  }
-
-  const t = content[params.lang];
+  if (!isValidLocale(params.lang)) notFound();
+  const label = pageLabels[params.lang];
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white border-b pb-2">
-        {t.title}
-      </h1>
-      
-      <div className="space-y-6">
-        {t.experiences.map((exp, index) => (
-          <div key={index} className="bg-white/80 dark:bg-gray-800/80 p-5 rounded-lg shadow-md">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              {exp.title}
-            </h3>
-            <p className="text-base text-blue-600 dark:text-blue-400">
-              {exp.organization}
-            </p>
-            <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
-              {exp.period}
-            </p>
-            <ul className="list-disc list-inside space-y-1 text-sm">
-              {exp.description.map((item, i) => (
-                <li key={i} className="text-gray-700 dark:text-gray-300">
-                  {item}
-                </li>
+    <div className="page-shell">
+      <header className="page-heading">
+        <p className="eyebrow">{params.lang === 'zh' ? '实践与研究' : 'Practice and research'}</p>
+        <h1>{label.experience}</h1>
+        <p>
+          {params.lang === 'zh'
+            ? '从天然产物药理、药品质量控制到药物制剂技术，持续积累跨机构、跨文化的研究经验。'
+            : 'Experience spanning natural-product pharmacology, pharmaceutical quality control, and advanced formulation technology.'}
+        </p>
+      </header>
+
+      <div className="stack-list">
+        {experiences[params.lang].map((item) => (
+          <article className="content-card" key={`${item.title}-${item.period}`}>
+            <time>{item.period}</time>
+            <h2>{item.title}</h2>
+            <p className="organization">{item.organization}</p>
+            {item.supervisor ? <p className="meta">{item.supervisor}</p> : null}
+            <p>{item.description}</p>
+            <div className="tag-list" aria-label={params.lang === 'zh' ? '相关技能' : 'Related skills'}>
+              {item.tags.map((tag) => (
+                <span className="tag" key={tag}>
+                  {tag}
+                </span>
               ))}
-            </ul>
-          </div>
+            </div>
+          </article>
         ))}
       </div>
     </div>
   );
-} 
+}

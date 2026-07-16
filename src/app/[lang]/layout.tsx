@@ -1,52 +1,97 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import '../globals.css'
-import { locales, isValidLocale, Locale } from '@/lib/i18n/config'
-import { notFound } from 'next/navigation'
-// import dynamic from 'next/dynamic' // 不再需要
-import NavigationBar from '@/components/common/NavigationBar' // 恢复路径别名
-import ClientOnlyWrapper from '@/components/common/ClientOnlyWrapper' // 导入包装器
+import type { Metadata, Viewport } from 'next';
+import '../globals.css';
+import SiteFrame from '@/components/layout/SiteFrame';
+import ThemeScript from '@/components/layout/ThemeScript';
+import { isValidLocale, locales, type Locale } from '@/lib/i18n/config';
+import { SITE_URL } from '@/lib/site-content';
+import { notFound } from 'next/navigation';
 
-// const NavigationBar = dynamic(() => import('@/components/common/NavigationBar'), {
-//   ssr: false,
-// })
-
-// Force static generation for this segment
 export const dynamic = 'force-static';
+export const dynamicParams = false;
 
-const inter = Inter({ subsets: ['latin'] })
-
-// Function to generate static paths for supported locales
-export async function generateStaticParams() {
-  return locales.map((locale: Locale) => ({
-    lang: locale,
-  }));
+export function generateStaticParams() {
+  return locales.map((lang) => ({ lang }));
 }
 
-// Metadata can still be defined here if needed for specific language routes
-// export const metadata: Metadata = { ... }
+export function generateMetadata({ params }: { params: { lang: string } }): Metadata {
+  if (!isValidLocale(params.lang)) return {};
+  const zh = params.lang === 'zh';
+  const url = `${SITE_URL}/${params.lang}/`;
+  const title = zh ? '谷昱宁 | 药物科学' : 'Yuning Gu | Pharmaceutical Sciences';
+  const description = zh
+    ? '谷昱宁的学术主页，研究方向涵盖药物制剂技术、药物递送、天然产物与临床研究。'
+    : 'Academic portfolio of Yuning Gu, working across pharmaceutical technology, drug delivery, natural products, and clinical research.';
 
-export default function LangLayout({
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: {
+      default: title,
+      template: zh ? '%s | 谷昱宁' : '%s | Yuning Gu',
+    },
+    description,
+    alternates: {
+      canonical: url,
+      languages: {
+        en: `${SITE_URL}/en/`,
+        zh: `${SITE_URL}/zh/`,
+      },
+    },
+    openGraph: {
+      type: 'profile',
+      url,
+      title,
+      description,
+      siteName: 'Yuning Gu',
+      locale: zh ? 'zh_CN' : 'en_GB',
+      images: [
+        {
+          url: `${SITE_URL}/og.png`,
+          width: 1733,
+          height: 909,
+          alt: 'Yuning Gu — Pharmaceutical Sciences',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [`${SITE_URL}/og.png`],
+    },
+  };
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f4f8f6' },
+    { media: '(prefers-color-scheme: dark)', color: '#071311' },
+  ],
+};
+
+export default function LangRootLayout({
   children,
   params,
 }: {
-  children: React.ReactNode
-  params: { lang: Locale }
+  children: React.ReactNode;
+  params: { lang: Locale };
 }) {
-  if (!isValidLocale(params.lang)) {
-    notFound()
-  }
+  if (!isValidLocale(params.lang)) notFound();
+  const skipLabel = params.lang === 'zh' ? '跳转到主要内容' : 'Skip to content';
 
   return (
-    <div className="relative flex flex-col flex-grow">
-      <ClientOnlyWrapper>
-        <NavigationBar lang={params.lang} />
-      </ClientOnlyWrapper>
-      <main className="mt-28 p-4 md:p-6 lg:p-8 flex-grow">
-        <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl shadow-lg p-5 md:p-7 max-w-6xl mx-auto">
-          {children}
-        </div>
-      </main>
-    </div>
-  )
-} 
+    <html lang={params.lang} suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+      </head>
+      <body>
+        <a className="skip-link" href="#main-content">
+          {skipLabel}
+        </a>
+        <SiteFrame lang={params.lang}>{children}</SiteFrame>
+      </body>
+    </html>
+  );
+}
