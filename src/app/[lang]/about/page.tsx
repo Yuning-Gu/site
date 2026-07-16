@@ -1,10 +1,12 @@
 import { notFound } from 'next/navigation';
+import Image from 'next/image';
 import { isValidLocale, type Locale } from '@/lib/i18n/config';
 import { createPageMetadata } from '@/lib/metadata';
 import { profile } from '@/lib/site-content';
 
-export function generateMetadata({ params }: { params: { lang: string } }) {
-  return createPageMetadata(params.lang, 'about', {
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  return createPageMetadata(lang, 'about', {
     en: {
       title: 'About',
       description: 'Background, interests, and academic journey of Yuning Gu.',
@@ -39,9 +41,10 @@ const copy = {
   },
 } satisfies Record<Locale, { title: string; intro: string; paragraphs: string[] }>;
 
-export default function AboutPage({ params }: { params: { lang: Locale } }) {
-  if (!isValidLocale(params.lang)) notFound();
-  const content = copy[params.lang];
+export default async function AboutPage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  if (!isValidLocale(lang)) notFound();
+  const content = copy[lang];
 
   return (
     <div className="page-shell">
@@ -54,17 +57,17 @@ export default function AboutPage({ params }: { params: { lang: Locale } }) {
       <div className="contact-grid">
         <div className="profile-card">
           <div className="portrait-wrap">
-            <img
-              src="/site/images/avatar.webp"
+            <Image
+              src="/images/avatar.webp"
               width="416"
               height="416"
               alt={`${profile.name} portrait`}
-              decoding="async"
+              sizes="(max-width: 720px) 72vw, 416px"
             />
           </div>
           <div className="profile-card-copy">
             <p className="card-label">Yuning Gu · 谷昱宁</p>
-            <p>{params.lang === 'zh' ? '药物科学 · 制剂技术 · 临床研究' : 'Pharmaceutical sciences · Formulation · Clinical research'}</p>
+            <p>{lang === 'zh' ? '药物科学 · 制剂技术 · 临床研究' : 'Pharmaceutical sciences · Formulation · Clinical research'}</p>
           </div>
         </div>
         <article className="contact-card">

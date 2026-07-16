@@ -11,10 +11,6 @@ export default function SiteHeader({ lang }: { lang: Locale }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    setMenuOpen(false);
-  }, [pathname]);
-
-  useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setMenuOpen(false);
     };
@@ -40,7 +36,12 @@ export default function SiteHeader({ lang }: { lang: Locale }) {
   return (
     <header className="site-header">
       <div className="header-inner">
-        <Link className="brand" href={`/${lang}`} aria-label={`${profile.name} home`}>
+        <Link
+          className="brand"
+          href={`/${lang}`}
+          aria-label={`${profile.name} home`}
+          onClick={() => setMenuOpen(false)}
+        >
           <span className="brand-mark" aria-hidden="true">
             YG
           </span>
@@ -69,6 +70,7 @@ export default function SiteHeader({ lang }: { lang: Locale }) {
             href={switchLanguage(lang === 'en' ? 'zh' : 'en')}
             lang={lang === 'en' ? 'zh' : 'en'}
             hrefLang={lang === 'en' ? 'zh' : 'en'}
+            onClick={() => setMenuOpen(false)}
           >
             {lang === 'en' ? '中文' : 'EN'}
           </Link>
@@ -105,7 +107,7 @@ export default function SiteHeader({ lang }: { lang: Locale }) {
         aria-label={lang === 'zh' ? '移动端导航' : 'Mobile navigation'}
       >
         {navigation[lang].map((item) => (
-          <Link key={item.href} href={item.href}>
+          <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>
             {item.label}
           </Link>
         ))}

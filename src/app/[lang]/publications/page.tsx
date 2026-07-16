@@ -1,10 +1,11 @@
 import { notFound } from 'next/navigation';
-import { isValidLocale, type Locale } from '@/lib/i18n/config';
+import { isValidLocale } from '@/lib/i18n/config';
 import { createPageMetadata } from '@/lib/metadata';
 import { pageLabels, publications } from '@/lib/site-content';
 
-export function generateMetadata({ params }: { params: { lang: string } }) {
-  return createPageMetadata(params.lang, 'publications', {
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  return createPageMetadata(lang, 'publications', {
     en: {
       title: 'Publications',
       description:
@@ -17,17 +18,18 @@ export function generateMetadata({ params }: { params: { lang: string } }) {
   });
 }
 
-export default function PublicationsPage({ params }: { params: { lang: Locale } }) {
-  if (!isValidLocale(params.lang)) notFound();
-  const label = pageLabels[params.lang];
+export default async function PublicationsPage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  if (!isValidLocale(lang)) notFound();
+  const label = pageLabels[lang];
 
   return (
     <div className="page-shell">
       <header className="page-heading">
-        <p className="eyebrow">{params.lang === 'zh' ? '学术成果' : 'Research output'}</p>
+        <p className="eyebrow">{lang === 'zh' ? '学术成果' : 'Research output'}</p>
         <h1>{label.publications}</h1>
         <p>
-          {params.lang === 'zh'
+          {lang === 'zh'
             ? '研究主题横跨临床生物标志物、糖尿病、天然活性成分与药物作用机制。'
             : 'Peer-reviewed work across clinical biomarkers, diabetes, natural bioactive compounds, and mechanisms of drug action.'}
         </p>

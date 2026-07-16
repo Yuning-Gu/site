@@ -1,6 +1,8 @@
 import type { MetadataRoute } from 'next';
 import { SITE_URL } from '@/lib/site-content';
 
+export const dynamic = 'force-static';
+
 const routes = ['', 'about', 'education', 'experience', 'projects', 'publications', 'research', 'skills', 'contact'];
 
 export default function sitemap(): MetadataRoute.Sitemap {

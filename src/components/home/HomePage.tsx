@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import type { Locale } from '@/lib/i18n/config';
 import {
   education,
@@ -30,13 +31,13 @@ export default function HomePage({ lang }: { lang: Locale }) {
 
         <aside className="profile-card" aria-label={content.statusLabel}>
           <div className="portrait-wrap">
-            <img
-              src="/site/images/avatar.webp"
+            <Image
+              src="/images/avatar.webp"
               alt={`${profile.name} portrait`}
               width="416"
               height="416"
-              decoding="async"
-              fetchPriority="high"
+              priority
+              sizes="(max-width: 720px) 72vw, 416px"
             />
           </div>
           <div className="profile-card-copy">

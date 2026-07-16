@@ -1,6 +1,6 @@
 import type { Locale } from '@/lib/i18n/config';
 
-export const SITE_URL = 'https://yuning-gu.github.io/site';
+export const SITE_URL = 'https://yuning-gu.github.io';
 
 export const profile = {
   name: 'Yuning Gu',

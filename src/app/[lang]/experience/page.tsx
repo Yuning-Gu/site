@@ -1,10 +1,11 @@
 import { notFound } from 'next/navigation';
-import { isValidLocale, type Locale } from '@/lib/i18n/config';
+import { isValidLocale } from '@/lib/i18n/config';
 import { createPageMetadata } from '@/lib/metadata';
 import { experiences, pageLabels } from '@/lib/site-content';
 
-export function generateMetadata({ params }: { params: { lang: string } }) {
-  return createPageMetadata(params.lang, 'experience', {
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  return createPageMetadata(lang, 'experience', {
     en: {
       title: 'Experience',
       description:
@@ -17,31 +18,32 @@ export function generateMetadata({ params }: { params: { lang: string } }) {
   });
 }
 
-export default function ExperiencePage({ params }: { params: { lang: Locale } }) {
-  if (!isValidLocale(params.lang)) notFound();
-  const label = pageLabels[params.lang];
+export default async function ExperiencePage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  if (!isValidLocale(lang)) notFound();
+  const label = pageLabels[lang];
 
   return (
     <div className="page-shell">
       <header className="page-heading">
-        <p className="eyebrow">{params.lang === 'zh' ? '实践与研究' : 'Practice and research'}</p>
+        <p className="eyebrow">{lang === 'zh' ? '实践与研究' : 'Practice and research'}</p>
         <h1>{label.experience}</h1>
         <p>
-          {params.lang === 'zh'
+          {lang === 'zh'
             ? '从天然产物药理、药品质量控制到药物制剂技术，持续积累跨机构、跨文化的研究经验。'
             : 'Experience spanning natural-product pharmacology, pharmaceutical quality control, and advanced formulation technology.'}
         </p>
       </header>
 
       <div className="stack-list">
-        {experiences[params.lang].map((item) => (
+        {experiences[lang].map((item) => (
           <article className="content-card" key={`${item.title}-${item.period}`}>
             <time>{item.period}</time>
             <h2>{item.title}</h2>
             <p className="organization">{item.organization}</p>
             {item.supervisor ? <p className="meta">{item.supervisor}</p> : null}
             <p>{item.description}</p>
-            <div className="tag-list" aria-label={params.lang === 'zh' ? '相关技能' : 'Related skills'}>
+            <div className="tag-list" aria-label={lang === 'zh' ? '相关技能' : 'Related skills'}>
               {item.tags.map((tag) => (
                 <span className="tag" key={tag}>
                   {tag}

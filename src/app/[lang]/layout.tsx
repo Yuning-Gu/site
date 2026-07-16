@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import '../globals.css';
 import SiteFrame from '@/components/layout/SiteFrame';
 import ThemeScript from '@/components/layout/ThemeScript';
-import { isValidLocale, locales, type Locale } from '@/lib/i18n/config';
+import { isValidLocale, locales } from '@/lib/i18n/config';
 import { SITE_URL } from '@/lib/site-content';
 import { notFound } from 'next/navigation';
 
@@ -13,10 +13,15 @@ export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
 }
 
-export function generateMetadata({ params }: { params: { lang: string } }): Metadata {
-  if (!isValidLocale(params.lang)) return {};
-  const zh = params.lang === 'zh';
-  const url = `${SITE_URL}/${params.lang}/`;
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  if (!isValidLocale(lang)) return {};
+  const zh = lang === 'zh';
+  const url = `${SITE_URL}/${lang}/`;
   const title = zh ? '谷昱宁 | 药物科学' : 'Yuning Gu | Pharmaceutical Sciences';
   const description = zh
     ? '谷昱宁的学术主页，研究方向涵盖药物制剂技术、药物递送、天然产物与临床研究。'
@@ -71,18 +76,19 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function LangRootLayout({
+export default async function LangRootLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
-  params: { lang: Locale };
+  params: Promise<{ lang: string }>;
 }) {
-  if (!isValidLocale(params.lang)) notFound();
-  const skipLabel = params.lang === 'zh' ? '跳转到主要内容' : 'Skip to content';
+  const { lang } = await params;
+  if (!isValidLocale(lang)) notFound();
+  const skipLabel = lang === 'zh' ? '跳转到主要内容' : 'Skip to content';
 
   return (
-    <html lang={params.lang} suppressHydrationWarning>
+    <html lang={lang} suppressHydrationWarning>
       <head>
         <ThemeScript />
       </head>
@@ -90,7 +96,7 @@ export default function LangRootLayout({
         <a className="skip-link" href="#main-content">
           {skipLabel}
         </a>
-        <SiteFrame lang={params.lang}>{children}</SiteFrame>
+        <SiteFrame lang={lang}>{children}</SiteFrame>
       </body>
     </html>
   );

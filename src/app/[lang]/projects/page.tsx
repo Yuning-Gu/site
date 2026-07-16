@@ -2,8 +2,9 @@ import { notFound } from 'next/navigation';
 import { isValidLocale, type Locale } from '@/lib/i18n/config';
 import { createPageMetadata } from '@/lib/metadata';
 
-export function generateMetadata({ params }: { params: { lang: string } }) {
-  return createPageMetadata(params.lang, 'projects', {
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  return createPageMetadata(lang, 'projects', {
     en: {
       title: 'Projects',
       description: 'Selected pharmaceutical research and innovation projects by Yuning Gu.',
@@ -70,17 +71,18 @@ const projects = {
   Array<{ period: string; title: string; role: string; description: string; tags: string[] }>
 >;
 
-export default function ProjectsPage({ params }: { params: { lang: Locale } }) {
-  if (!isValidLocale(params.lang)) notFound();
+export default async function ProjectsPage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  if (!isValidLocale(lang)) notFound();
 
   return (
     <div className="page-shell">
       <header className="page-heading">
-        <p className="eyebrow">{params.lang === 'zh' ? '研究与创新' : 'Research and innovation'}</p>
-        <h1>{params.lang === 'zh' ? '项目经历' : 'Projects'}</h1>
+        <p className="eyebrow">{lang === 'zh' ? '研究与创新' : 'Research and innovation'}</p>
+        <h1>{lang === 'zh' ? '项目经历' : 'Projects'}</h1>
       </header>
       <div className="stack-list">
-        {projects[params.lang].map((project) => (
+        {projects[lang].map((project) => (
           <article className="content-card" key={project.title}>
             <time>{project.period}</time>
             <h2>{project.title}</h2>
