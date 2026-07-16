@@ -23,9 +23,34 @@ const copy = {
     title: 'About me',
     intro:
       'I am an M1 student in Development of Drugs and Health Products (D2HP) at the Faculty of Pharmacy, Université Paris-Saclay.',
+    storyEyebrow: 'Academic profile',
     paragraphs: [
-      'My academic path began in pharmaceutic preparations and natural-product research. It now spans pharmaceutical technology, experimental pharmacology, drug delivery, and clinical data analysis.',
-      'In 2026, I undertook a research internship at the University of Szeged with Dr. habil. Tamás Sovány, investigating hot-melt extrusion of HPMC-based filaments for potential FDM tablet printing.',
+      'My undergraduate training in Pharmaceutic Preparations at Heilongjiang University of Chinese Medicine gave me a foundation in formulation science, modern drug-delivery systems, pharmaceutical analysis, and experimental pharmacology. Together, these subjects taught me to see drug development across design, manufacture, quality evaluation, and biological effect.',
+      'Beyond coursework, I investigated natural-product interventions for diabetes using GC–MS, enzyme-inhibition assays, network pharmacology, molecular docking, and in vivo validation. Quality-control experience at Bayer (China) and Dihon Pharmaceutical further introduced me to HPLC, near-infrared spectroscopy, microbiological testing, and GMP systems.',
+      'In the D2HP programme at Université Paris-Saclay, my training has expanded to drug development, major pathologies, pharmacy and biotechnology, and interdisciplinary pharmaceutical science. I have also extended my experimental background into clinical data analysis, using NHANES data to study the predictive performance of UHR for cardiovascular disease in cancer patients.',
+      'From April to July 2026, under the supervision of Dr. habil. Tamás Sovány at the University of Szeged, I investigated hot-melt extrusion of HPMC-based filaments for potential FDM tablet printing. Across these experiences, I am most interested in connecting formulation technology, drug delivery, experimental pharmacology, and population evidence to develop health products that are both scientifically robust and practically relevant.',
+    ],
+    focusLabel: 'Working across',
+    focusTags: [
+      'Formulation science',
+      'Drug delivery',
+      'Experimental pharmacology',
+      'Pharmaceutical analysis',
+      'Clinical data',
+    ],
+    chapterEyebrow: 'Current chapter',
+    chapterTitle: 'Building a bridge from evidence to formulation technology.',
+    chapterItems: [
+      {
+        period: '2025–2026',
+        title: 'D2HP · M1',
+        detail: 'Faculty of Pharmacy, Université Paris-Saclay',
+      },
+      {
+        period: 'Apr–Jul 2026',
+        title: 'Research internship',
+        detail: 'Faculty of Pharmacy, University of Szeged',
+      },
     ],
     beyondEyebrow: 'Beyond research',
     beyondTitle: 'A few things that keep me curious.',
@@ -63,9 +88,28 @@ const copy = {
     title: '关于我',
     intro:
       '我现就读于巴黎萨克雷大学药学院 M1 Development of Drugs and Health Products（D2HP）项目。',
+    storyEyebrow: '学术简介',
     paragraphs: [
-      '我的学术经历始于药物制剂与天然产物研究，目前逐步拓展至药物制剂技术、实验药理、药物递送和临床数据分析。',
-      '2026 年，我在 Dr. habil. Tamás Sovány 指导下，于塞格德大学开展科研实习，研究 HPMC 基丝材热熔挤出及其用于 FDM 片剂打印的潜力。',
+      '本科阶段，我在黑龙江中医药大学主修药物制剂，系统学习制剂科学、现代药物递送、药物分析与实验药理。这些课程使我从药物的设计、制备、质量评价和生物效应等环节理解药物研发，并奠定了实验与分析基础。',
+      '课程之外，我参与天然产物干预糖尿病研究，运用 GC–MS、酶抑制实验、网络药理、分子对接和体内验证探索活性成分及作用机制；在拜耳（中国）与滇虹药业的质量控制实习中，我进一步接触了 HPLC、近红外光谱、微生物检测及 GMP 质量体系。',
+      '在巴黎萨克雷大学 D2HP 项目中，我的学习拓展至药物开发、重大疾病、药学与生物技术以及跨学科药物科学。我也将实验研究经验延伸至临床数据分析，利用 NHANES 数据研究 UHR 对癌症患者心血管疾病的预测表现。',
+      '2026 年 4 月至 7 月，我在塞格德大学 Dr. habil. Tamás Sovány 指导下，研究 HPMC 基丝材的热熔挤出及其用于 FDM 片剂打印的潜力。贯穿这些经历的核心兴趣，是连接制剂技术、药物递送、实验药理与人群证据，探索兼具科学严谨性与实际应用价值的药物和健康产品。',
+    ],
+    focusLabel: '关注领域',
+    focusTags: ['制剂科学', '药物递送', '实验药理', '药物分析', '临床数据'],
+    chapterEyebrow: '当前阶段',
+    chapterTitle: '从研究证据走向药物制剂技术。',
+    chapterItems: [
+      {
+        period: '2025–2026',
+        title: 'D2HP · M1',
+        detail: '巴黎萨克雷大学药学院',
+      },
+      {
+        period: '2026.04–07',
+        title: '科研实习',
+        detail: '塞格德大学药学院',
+      },
     ],
     beyondEyebrow: '研究之外',
     beyondTitle: '让我保持好奇的日常。',
@@ -104,7 +148,13 @@ const copy = {
   {
     title: string;
     intro: string;
+    storyEyebrow: string;
     paragraphs: string[];
+    focusLabel: string;
+    focusTags: string[];
+    chapterEyebrow: string;
+    chapterTitle: string;
+    chapterItems: Array<{ period: string; title: string; detail: string }>;
     beyondEyebrow: string;
     beyondTitle: string;
     beyondIntro: string;
@@ -141,11 +191,38 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
             <p>{lang === 'zh' ? '药物科学 · 制剂技术 · 临床研究' : 'Pharmaceutical sciences · Formulation · Clinical research'}</p>
           </div>
         </div>
-        <article className="contact-card">
-          {content.paragraphs.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-        </article>
+        <div className="about-copy-stack">
+          <article className="contact-card about-story">
+            <p className="eyebrow">{content.storyEyebrow}</p>
+            {content.paragraphs.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+            <div className="about-focus">
+              <span>{content.focusLabel}</span>
+              <div className="tag-list">
+                {content.focusTags.map((tag) => (
+                  <span className="tag" key={tag}>
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </article>
+
+          <aside className="about-chapter">
+            <p className="card-label">{content.chapterEyebrow}</p>
+            <h2>{content.chapterTitle}</h2>
+            <div className="about-chapter-grid">
+              {content.chapterItems.map((item) => (
+                <div className="about-chapter-item" key={item.period}>
+                  <span>{item.period}</span>
+                  <strong>{item.title}</strong>
+                  <p>{item.detail}</p>
+                </div>
+              ))}
+            </div>
+          </aside>
+        </div>
       </div>
 
       <section className="interests-section" aria-labelledby="interests-title">
