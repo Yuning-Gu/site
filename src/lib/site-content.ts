@@ -16,6 +16,7 @@ export const profile = {
 export const navigation = {
   en: [
     { label: 'Home', href: '/en' },
+    { label: 'About', href: '/en/about' },
     { label: 'Research', href: '/en/research' },
     { label: 'Publications', href: '/en/publications' },
     { label: 'Experience', href: '/en/experience' },
@@ -23,6 +24,7 @@ export const navigation = {
   ],
   zh: [
     { label: '首页', href: '/zh' },
+    { label: '关于', href: '/zh/about' },
     { label: '研究', href: '/zh/research' },
     { label: '论文', href: '/zh/publications' },
     { label: '经历', href: '/zh/experience' },
