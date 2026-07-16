@@ -798,9 +798,18 @@ main {
   margin-bottom: 24px;
 }
 
-.about-copy-stack {
-  display: grid;
-  gap: 18px;
+.about-grid {
+  grid-template-areas:
+    'profile story'
+    'chapter story';
+}
+
+.about-grid > .profile-card {
+  grid-area: profile;
+}
+
+.about-story {
+  grid-area: story;
 }
 
 .about-story .eyebrow {
@@ -837,6 +846,7 @@ main {
 }
 
 .about-chapter {
+  grid-area: chapter;
   padding: 27px 29px;
   border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line));
   border-radius: var(--radius-lg);
@@ -1439,6 +1449,13 @@ main {
   .contact-grid,
   .interests-grid {
     grid-template-columns: 1fr;
+  }
+
+  .about-grid {
+    grid-template-areas:
+      'profile'
+      'story'
+      'chapter';
   }
 
   .about-chapter-grid {

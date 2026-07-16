@@ -175,7 +175,7 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
         <p>{content.intro}</p>
       </header>
 
-      <div className="contact-grid">
+      <div className="contact-grid about-grid">
         <div className="profile-card">
           <div className="portrait-wrap">
             <Image
@@ -191,38 +191,37 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
             <p>{lang === 'zh' ? '药物科学 · 制剂技术 · 临床研究' : 'Pharmaceutical sciences · Formulation · Clinical research'}</p>
           </div>
         </div>
-        <div className="about-copy-stack">
-          <article className="contact-card about-story">
-            <p className="eyebrow">{content.storyEyebrow}</p>
-            {content.paragraphs.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-            <div className="about-focus">
-              <span>{content.focusLabel}</span>
-              <div className="tag-list">
-                {content.focusTags.map((tag) => (
-                  <span className="tag" key={tag}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </article>
 
-          <aside className="about-chapter">
-            <p className="card-label">{content.chapterEyebrow}</p>
-            <h2>{content.chapterTitle}</h2>
-            <div className="about-chapter-grid">
-              {content.chapterItems.map((item) => (
-                <div className="about-chapter-item" key={item.period}>
-                  <span>{item.period}</span>
-                  <strong>{item.title}</strong>
-                  <p>{item.detail}</p>
-                </div>
+        <article className="contact-card about-story">
+          <p className="eyebrow">{content.storyEyebrow}</p>
+          {content.paragraphs.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+          <div className="about-focus">
+            <span>{content.focusLabel}</span>
+            <div className="tag-list">
+              {content.focusTags.map((tag) => (
+                <span className="tag" key={tag}>
+                  {tag}
+                </span>
               ))}
             </div>
-          </aside>
-        </div>
+          </div>
+        </article>
+
+        <aside className="about-chapter">
+          <p className="card-label">{content.chapterEyebrow}</p>
+          <h2>{content.chapterTitle}</h2>
+          <div className="about-chapter-grid">
+            {content.chapterItems.map((item) => (
+              <div className="about-chapter-item" key={item.period}>
+                <span>{item.period}</span>
+                <strong>{item.title}</strong>
+                <p>{item.detail}</p>
+              </div>
+            ))}
+          </div>
+        </aside>
       </div>
 
       <section className="interests-section" aria-labelledby="interests-title">
